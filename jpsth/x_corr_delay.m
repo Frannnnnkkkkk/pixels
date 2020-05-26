@@ -1,10 +1,10 @@
 %  A peak at a negative lag for stat.xcorr(chan1,chan2,:) means that chan1 is leading
 %  chan2. Thus, a negative lag represents a spike in the second dimension of
 %  stat.xcorr before the channel in the third dimension of stat.stat.
-homedir='/home/zx';
-currmodel='error';
+homedir='/public1/home/sc51281';
+currmodel='selective';
 delay=6;
-bin_range=[1 2];
+bin_range=[8 9];
 addpath(fullfile('npy-matlab-master','npy-matlab'))
 addpath('fieldtrip-20200320')
 ft_defaults
@@ -44,6 +44,9 @@ for i=1:length(supool)
         % waveform data
         
         wfstats=h5read(wffile,'/wf');
+	if isempty(xc_s1) || isempty(xc_s2)
+		continue
+	end
         for lblidx=1:size(xc_s1.label,1)
             wfidx=find(wfstats(:,1)==str2double(xc_s1.label{lblidx,1}));
             if ~isempty(wfidx)
@@ -71,7 +74,7 @@ for i=1:length(supool)
  	fprintf('%d of %d\n',i,length(supool))
 end
 
-return 
+quit(0) 
 
 function [avail,out]=pre_process(folder,sustIds,transIds,model)
 sps=30000;
